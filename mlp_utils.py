@@ -59,13 +59,13 @@ class LogSoftMax(Layer):
 
     def forward(self, logits, labels):
         true_label_logits = logits[np.arange(len(labels)), labels]
-        log_sum_logits = np.log(np.sum(np.exp(logits), axis=-1))  # summation over logit axis
+        log_sum_logits = np.log(np.sum(np.exp(logits), axis=-1))  # summation over logits axis
         logsoftmax = - true_label_logits + log_sum_logits
         return np.mean(logsoftmax, axis=0)  # mean over batch axis
 
 
     def backward(self, logits, labels):
-        softmax = np.exp(logits) / np.sum(logits, axis=-1) # summation over logit axis
+        softmax = np.exp(logits) / np.sum(np.exp(logits),axis=-1, keepdims=True) # summation over logits axis
         ones_for_labels = np.zeros_like(logits)
         ones_for_labels[np.arange(len(labels)), labels] = 1
 
@@ -107,7 +107,6 @@ class NNetwork:
             grad_output = layer.backward(input, grad_output)
 
 
-
     def predict(self, X):
-        logits = self.forward(X)
-        return np.argmax(logits, axis=-1)    
+        _, logits = self.forward(X)
+        return np.argmax(logits, axis=-1)
