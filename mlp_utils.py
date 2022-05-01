@@ -30,7 +30,7 @@ class Dense(Layer):
     def __init__(self, input_units, output_units, lr=.1):
         self.lr = lr
 
-        self.weights = np.random.randn(input_units, output_units)
+        self.weights = np.random.randn(input_units, output_units)*0.01
         self.biases = np.zeros(output_units)
 
     def update_weights(self, grad_weights, grad_biases):
@@ -65,11 +65,12 @@ class LogSoftMax(Layer):
 
 
     def backward(self, logits, labels):
+        batch_size = labels.shape[0]
         softmax = np.exp(logits) / np.sum(np.exp(logits),axis=-1, keepdims=True) # summation over logits axis
         ones_for_labels = np.zeros_like(logits)
         ones_for_labels[np.arange(len(labels)), labels] = 1
 
-        grad_logits = -ones_for_labels + softmax
+        grad_logits = (- ones_for_labels + softmax) / batch_size
 
         return grad_logits  # dLoss / dlogits
 
