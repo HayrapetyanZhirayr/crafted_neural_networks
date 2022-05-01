@@ -1,7 +1,9 @@
 import numpy as np
 
 class Layer:
-
+    '''
+    Parent class for layers. Created to add common properties to layer objects.
+    '''
     def __init__(self):
         pass
 
@@ -12,7 +14,11 @@ class Layer:
         return input
 
 class ReLU(Layer):
-
+    '''
+    Rectified Liner Unit Layer
+    forward :: x -> x if x > 0
+               x -> 0 otherwise
+    '''
     def __init__(self, ):
         pass
 
@@ -26,6 +32,10 @@ class ReLU(Layer):
 
 
 class Dense(Layer):
+    '''
+    Fully Connected Layer.
+    forward:: x -> Wx + b, where W is a linear transformation.
+    '''
 
     def __init__(self, input_units, output_units, lr=.1):
         self.lr = lr
@@ -52,7 +62,13 @@ class Dense(Layer):
 
 
 
-class LogSoftMax(Layer):
+class LogitsSoftMaxCE(Layer):
+    '''
+    Logits SoftMax CrossEntropy. This is a class to compute CrossEntropy loss
+    straight from logits of the model.
+    Actually not a Layer but a loss function. Is created as a layer to be similar
+    to others and not to break forward/backward paradigm.
+    '''
 
     def __init__(self, ):
         pass
@@ -76,6 +92,9 @@ class LogSoftMax(Layer):
 
 
 class NNetwork:
+    '''
+    Wrapper for a series of Layers (a Network).
+    '''
 
     def __init__(self, layers, loss):
         # layers :: list<Layer>
